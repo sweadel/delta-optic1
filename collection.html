@@ -105,17 +105,15 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // دالة جلب البيانات مع ميزة الحذف التلقائي للعناصر بدون صور
+    // دالة جلب البيانات مع دمج الصور المحلية (0011001)
     onSnapshot(query(collection(db, "brands"), orderBy("timestamp", "desc")), (snap) => {
         const gal = document.getElementById('gallery'); 
         gal.innerHTML = "";
         
-        if(snap.empty) {
-            gal.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:50px; color:gray;">المعرض فارغ حالياً</div>';
-            return;
-        }
+        let hasItems = false;
 
         snap.forEach(d => {
+            hasItems = true;
             const b = d.data();
             const card = document.createElement('div');
             card.className = `card item-${b.type}`;
@@ -134,6 +132,34 @@
             `;
             gal.appendChild(card);
         });
+
+        // إضافة الصور المرفوعة محلياً (من m10 إلى m58) لتعزيز المعرض
+        for(let i=10; i<=58; i++) {
+            hasItems = true;
+            const type = (i % 2 === 0) ? 'medical' : 'sun';
+            const name = `موديل رقم ${i}`;
+            const imgUrl = `0011001/m${i}.jpg`;
+            const card = document.createElement('div');
+            card.className = `card item-${type} local-item`;
+            card.onclick = () => openLightbox(imgUrl, name);
+            
+            card.innerHTML = `
+                <div class="badge" style="background:var(--brand); color:white;">${type === 'sun' ? 'شمسي' : 'طبي'}</div>
+                <div class="img-wrap">
+                    <img src="${imgUrl}" alt="${name}" 
+                         onload="this.classList.add('loaded')" 
+                         onerror="this.closest('.card').remove()"> 
+                </div>
+                <div style="padding:12px; text-align:center;">
+                    <h3 style="font-size:0.9rem; margin:0; color:var(--text-dark); font-weight:800;">${name}</h3>
+                </div>
+            `;
+            gal.appendChild(card);
+        }
+
+        if(!hasItems) {
+            gal.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:50px; color:gray;">المعرض فارغ حالياً</div>';
+        }
     });
 
     window.filterItems = (type, btn) => {
