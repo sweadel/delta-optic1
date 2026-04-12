@@ -250,8 +250,8 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyB11C4GGgAyqeThs8a9cvDNN7frvAA1nqQ", authDomain: "delta-optics-system.firebaseapp.com", projectId: "delta-optics-system", storageBucket: "delta-optics-system.firebasestorage.app", messagingSenderId: "111176219224", appId: "1:111176219224:web:e0d8a5f26b84d57249a82d" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app);
@@ -403,7 +403,32 @@
         function typeColor(n) { if(colInput.length < 2) colInput += n; document.getElementById('color-display').innerText = colInput; }
         function clearColor() { colInput = ""; document.getElementById('color-display').innerText = ""; }
         function checkColor() { if(parseInt(colInput) === colTests[colRound]) colScore++; colRound++; nextColorPlate(); }
-        function toggleLang() { alert("العربية مفعلة."); }
+        function toggleLang() {
+            const isAr = document.documentElement.lang === 'ar';
+            const newLang = isAr ? 'en' : 'ar';
+            document.documentElement.lang = newLang;
+            document.documentElement.dir = isAr ? 'ltr' : 'rtl';
+            document.querySelector('.lang-btn').innerText = isAr ? 'AR' : 'EN';
+            const tmap = isAr
+              ? { '.header-title':'Smart Clinic', '#patientNameInput':"Patient's full name", '#patientPhoneInput':'Phone number', '.login-input:first-of-type':'placeholder' }
+              : {};
+            // Update i18n strings on visible screen
+            if(isAr) {
+                document.querySelector('.header-title').innerText = 'Smart Clinic';
+                document.querySelector('h2[style*="color:var(--brand-color)"]') && (document.querySelector('h2[style*="color:var(--brand-color)"]').innerText = 'Patient Registration');
+                document.getElementById('patientNameInput').placeholder = 'Patient name (e.g. Ahmad Ali)';
+                document.getElementById('patientPhoneInput').placeholder = 'Phone number';
+                document.querySelector('.action-btn.btn-primary').innerHTML = '<i class="fas fa-play"></i> Start Tests';
+                document.getElementById('btn-dry-start') && (document.getElementById('btn-dry-start').innerHTML = '<i class="fas fa-play"></i> Start Test');
+            } else {
+                document.querySelector('.header-title').innerText = 'العيادة الذكية';
+                document.querySelector('h2[style*="color:var(--brand-color)"]') && (document.querySelector('h2[style*="color:var(--brand-color)"]').innerText = 'تسجيل المراجع');
+                document.getElementById('patientNameInput').placeholder = 'اسم المراجع (مثال: أحمد عادل)';
+                document.getElementById('patientPhoneInput').placeholder = 'رقم الهاتف للتواصل';
+                document.querySelector('.action-btn.btn-primary').innerHTML = '<i class="fas fa-play"></i> بدء الفحوصات';
+                document.getElementById('btn-dry-start') && (document.getElementById('btn-dry-start').innerHTML = '<i class="fas fa-play"></i> بدء الفحص');
+            }
+        }
     </script>
 </body>
 </html>
