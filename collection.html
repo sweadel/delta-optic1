@@ -32,12 +32,13 @@
 
         /* شبكة المعرض */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 20px; max-width: 1200px; margin: 0 auto; }
-        .card { background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid #E2E8F0; cursor: pointer; position: relative; transition: 0.3s; animation: fadeInUp 0.4s forwards; }
-        .card:hover { transform: translateY(-5px); }
+        .card { background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid #E2E8F0; cursor: pointer; position: relative; transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); animation: fadeInUp 0.4s forwards; transform-style: preserve-3d; will-change: transform; perspective: 1000px; }
+        .card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 15px 35px rgba(0,0,0,0.1); z-index: 10; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .img-wrap { width: 100%; height: 170px; background: #F1F5F9; position: relative; }
-        .card img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+        .img-wrap { width: 100%; height: 170px; background: #F1F5F9; position: relative; overflow: hidden; }
+        .card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+        .card:hover img { transform: scale(1.08); }
         .badge { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; color: var(--brand); z-index: 5; }
 
         /* نافذة العرض (Lightbox) مع سهم الرجوع */
@@ -181,6 +182,29 @@
         document.getElementById('lightbox').style.display = 'none';
         document.body.style.overflow = 'auto';
     }
+
+    // 3D Tilt Effect on mousemove for desktop
+    document.addEventListener('mousemove', (e) => {
+        if(window.innerWidth < 768) return;
+        const cards = document.querySelectorAll('.card:hover');
+        cards.forEach(card => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const halfW = rect.width / 2;
+            const halfH = rect.height / 2;
+            const rotateY = ((x - halfW) / halfW) * 8; // max 8 degrees
+            const rotateX = ((y - halfH) / halfH) * -8;
+            card.style.transform = \`translateY(-8px) scale(1.02) perspective(1000px) rotateX(\${rotateX}deg) rotateY(\${rotateY}deg)\`;
+        });
+    });
+
+    document.addEventListener('mouseout', (e) => {
+        if(e.target.closest('.card')) {
+            const card = e.target.closest('.card');
+            card.style.transform = 'translateY(0) scale(1) rotateX(0) rotateY(0)';
+        }
+    });
 </script>
 </body>
 </html>
