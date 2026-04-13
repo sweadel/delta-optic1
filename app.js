@@ -1,8 +1,8 @@
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, setDoc, deleteDoc, updateDoc, limit } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-import { Auth } from './auth.js';
+import { Auth, app } from './auth.js';
 
-// Firebase already initialized in auth.js - get the db instance
-const db = getFirestore();
+// Use the same Firebase app instance initialized in auth.js
+const db = getFirestore(app);
 
 // ─── Global state ────────────────────────────────────────────
 window.allRecords  = [];
