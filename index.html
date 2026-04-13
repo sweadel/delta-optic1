@@ -454,35 +454,57 @@ tbody tr:hover td{background:var(--glass);}
     <!-- ══ DASHBOARD ══ -->
     <div id="page-dash" class="page page-active">
       <div class="pgh"><h1 class="pgt">لوحة التحكم</h1><p class="pgs">نظرة شاملة على أداء اليوم</p></div>
-      
-      <!-- Welcome Premium Banner -->
-      <div class="welcome-banner" style="background: linear-gradient(135deg, rgba(79, 142, 247, 0.15), rgba(139, 92, 246, 0.15)); border: 1px solid rgba(79, 142, 247, 0.3); border-radius: 24px; padding: 30px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; overflow: hidden; position: relative;">
-          <div style="z-index: 2;">
-              <h2 style="font-size: 24px; font-weight: 900; margin-bottom: 5px; color: var(--blue);">أهلاً بك في نظام دلتا الإداري 👋</h2>
-              <p style="color: var(--t2); font-size: 14px; max-width: 400px; line-height: 1.6;">الآن يمكنك متابعة المبيعات، الفحوصات، وإدارة كل شيء من مكان واحد بسهولة واحترافية.</p>
+
+      <!-- Premium Welcome Banner -->
+      <div style="position:relative;border-radius:24px;padding:28px 28px 28px 140px;margin-bottom:24px;overflow:hidden;background:linear-gradient(135deg,rgba(79,142,247,.12),rgba(139,92,246,.1));border:1px solid rgba(79,142,247,.25);">
+        <!-- Decorative dot grid -->
+        <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(79,142,247,.06) 1px,transparent 1px);background-size:18px 18px;pointer-events:none;"></div>
+        <!-- Glasses SVG illustration -->
+        <div style="position:absolute;left:-10px;top:50%;transform:translateY(-50%);opacity:.9;">
+          <svg width="140" height="90" viewBox="0 0 240 82" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:bannerGlass 6s ease-in-out infinite;">
+            <style>@keyframes bannerGlass{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}</style>
+            <defs>
+              <linearGradient id="bg1" x1="0" y1="0" x2="240" y2="82" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#4f8ef7"/><stop offset="100%" stop-color="#8b5cf6"/>
+              </linearGradient>
+              <filter id="bg2"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <path d="M26,22 Q12,18 3,15" stroke="url(#bg1)" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+            <circle cx="62" cy="41" r="34" stroke="url(#bg1)" stroke-width="2.5" filter="url(#bg2)"/>
+            <circle cx="62" cy="41" r="24" stroke="url(#bg1)" stroke-width=".8" opacity=".3"/>
+            <circle cx="62" cy="41" r="33" fill="rgba(79,142,247,.08)"/>
+            <circle cx="51" cy="30" r="6" fill="rgba(255,255,255,.07)"/>
+            <circle cx="51" cy="30" r="2.5" fill="rgba(255,255,255,.2)"/>
+            <path d="M96,41 C106,27 134,27 144,41" stroke="url(#bg1)" stroke-width="2.5" stroke-linecap="round" filter="url(#bg2)"/>
+            <circle cx="178" cy="41" r="34" stroke="url(#bg1)" stroke-width="2.5" filter="url(#bg2)"/>
+            <circle cx="178" cy="41" r="24" stroke="url(#bg1)" stroke-width=".8" opacity=".3"/>
+            <circle cx="178" cy="41" r="33" fill="rgba(139,92,246,.08)"/>
+            <circle cx="167" cy="30" r="6" fill="rgba(255,255,255,.07)"/>
+            <circle cx="167" cy="30" r="2.5" fill="rgba(255,255,255,.2)"/>
+            <path d="M214,22 Q228,18 237,15" stroke="url(#bg1)" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+            <circle cx="62" cy="41" r="4" fill="rgba(79,142,247,.5)"/>
+            <circle cx="178" cy="41" r="4" fill="rgba(139,92,246,.5)"/>
+          </svg>
+        </div>
+        <!-- Text -->
+        <div style="position:relative;z-index:2;">
+          <div style="font-size:11px;font-weight:900;letter-spacing:1.5px;color:var(--blue);text-transform:uppercase;margin-bottom:7px;opacity:.8;">DELTA VISION PRO &nbsp;·&nbsp; ENTERPRISE</div>
+          <h2 class="welcome-banner" style="font-size:21px;font-weight:900;color:var(--t1);margin-bottom:7px;">أهلاً بك في نظام دلتا الإداري 👋</h2>
+          <p style="color:var(--t2);font-size:13px;line-height:1.65;max-width:380px;font-weight:500;">تتبع المبيعات والفحوصات وإدارة كل شيء من مكان واحد بسهولة واحترافية.</p>
+          <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+            <span style="background:rgba(79,142,247,.15);border:1px solid rgba(79,142,247,.3);color:var(--blue);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:800;">&#9679; متصل بـ Firebase</span>
+            <span style="background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);color:var(--green);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:800;">&#10003; النظام يعمل</span>
           </div>
-          <div style="position: absolute; left: 20px; top: -30px; opacity: 0.8; z-index: 1;">
-              <!-- 3D Illustration placeholder via SVG -->
-              <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                      <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#4f8ef7;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
-                      </linearGradient>
-                  </defs>
-                  <circle cx="100" cy="100" r="80" fill="url(#grad1)" opacity="0.3" />
-                  <path d="M70,80 Q100,50 130,80 T130,140 Q100,170 70,140 T70,80" fill="url(#grad1)" />
-                  <circle cx="100" cy="110" r="30" fill="#fff" opacity="0.4" />
-              </svg>
-          </div>
+        </div>
       </div>
 
+      <!-- KPI Cards with icons -->
       <div class="kgrid">
-        <div class="kcard"><div class="kl">المبيعات اليومية</div><div class="kv mono" id="kpi-sales">0.00</div><div class="ku">JOD (إجمالي)</div></div>
-        <div class="kcard"><div class="kl">المقبوضات</div><div class="kv mono" id="kpi-paid">0.00</div><div class="ku">JOD (مدفوع)</div></div>
-        <div class="kcard"><div class="kl">المصاريف</div><div class="kv mono" style="color:var(--red)" id="kpi-exp">0.00</div><div class="ku">JOD</div></div>
-        <div class="kcard"><div class="kl">صافي اليوم</div><div class="kv mono" style="color:var(--green)" id="kpi-net">0.00</div><div class="ku">JOD</div></div>
-        <div class="kcard"><div class="kl">الديون المعلقة</div><div class="kv mono" style="color:var(--yellow)" id="kpi-due">0.00</div><div class="ku">JOD</div></div>
+        <div class="kcard" style="border-top:2px solid var(--blue);"><div style="font-size:1.3rem;margin-bottom:3px;">💰</div><div class="kl">المبيعات اليومية</div><div class="kv mono" id="kpi-sales">0.00</div><div class="ku">JOD (إجمالي)</div></div>
+        <div class="kcard" style="border-top:2px solid var(--green);"><div style="font-size:1.3rem;margin-bottom:3px;">✅</div><div class="kl">المقبوضات</div><div class="kv mono" id="kpi-paid">0.00</div><div class="ku">JOD (مدفوع)</div></div>
+        <div class="kcard" style="border-top:2px solid var(--red);"><div style="font-size:1.3rem;margin-bottom:3px;">📤</div><div class="kl">المصاريف</div><div class="kv mono" style="color:var(--red)" id="kpi-exp">0.00</div><div class="ku">JOD</div></div>
+        <div class="kcard" style="border-top:2px solid var(--green);"><div style="font-size:1.3rem;margin-bottom:3px;">📊</div><div class="kl">صافي اليوم</div><div class="kv mono" style="color:var(--green)" id="kpi-net">0.00</div><div class="ku">JOD</div></div>
+        <div class="kcard" style="border-top:2px solid var(--yellow);"><div style="font-size:1.3rem;margin-bottom:3px;">⏳</div><div class="kl">الديون المعلقة</div><div class="kv mono" style="color:var(--yellow)" id="kpi-due">0.00</div><div class="ku">JOD</div></div>
       </div>
       <div class="g2">
         <div class="card cp">
