@@ -285,6 +285,43 @@ tbody tr:hover td{background:var(--glass);}
 
 /* ── RESPONSIVE ── */
 @media(max-width:900px){.g2{grid-template-columns:1fr;}.g3{grid-template-columns:1fr 1fr;}}
+
+/* ── TOAST SYSTEM ── */
+.toast-container{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;min-width:260px;max-width:380px;}
+.toast{background:var(--bg2);border:1px solid var(--glass-b);border-radius:12px;padding:11px 16px;box-shadow:0 8px 24px rgba(0,0,0,.4);display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;animation:toastIn .35s var(--bounce);pointer-events:all;}
+@keyframes toastIn{from{opacity:0;transform:translateY(-12px) scale(.9);}to{opacity:1;transform:none;}}
+.toast.out{animation:toastOut .3s ease forwards;}
+@keyframes toastOut{to{opacity:0;transform:translateY(-8px) scale(.95);}}
+.toast-ok{border-right:3px solid var(--green);}.toast-ok i{color:var(--green);}
+.toast-err{border-right:3px solid var(--red);}.toast-err i{color:var(--red);}
+.toast-info{border-right:3px solid var(--blue);}.toast-info i{color:var(--blue);}
+.toast-warn{border-right:3px solid var(--yellow);}.toast-warn i{color:var(--yellow);}
+
+/* ── KPI animated glow ── */
+.kcard::before{content:'';position:absolute;inset:0;border-radius:var(--r2);background:linear-gradient(135deg,rgba(79,142,247,.04),transparent);pointer-events:none;}
+.kcard .kv{transition:color .4s;}
+
+/* ── Loading bar ── */
+.load-bar{position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--purple),var(--blue));background-size:200% 100%;animation:loadAnim 1.2s linear infinite;z-index:9998;display:none;}
+.load-bar.on{display:block;}
+@keyframes loadAnim{0%{background-position:0% 0%;}100%{background-position:200% 0%;}}
+
+/* ── Sidebar hover upgrade ── */
+.ni{position:relative;overflow:hidden;}
+.ni::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(79,142,247,.05),transparent);transform:translateX(-100%);transition:transform .4s;}
+.ni:hover::after{transform:translateX(100%);}
+
+/* ── Clock ── */
+.hdr-clock{font-size:11px;color:var(--t3);font-family:monospace;font-weight:700;letter-spacing:.5px;white-space:nowrap;}
+
+/* ── Connection dot ── */
+.conn-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:connPulse 2s infinite;display:inline-block;margin-right:4px;}
+@keyframes connPulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+
+/* ── Welcome banner upgrade ── */
+.welcome-banner h2{animation:waveText 3s ease-in-out infinite;}
+@keyframes waveText{0%,100%{opacity:1;}50%{opacity:.85;}}
+
 @media(max-width:600px){
   .mw{padding:16px 14px 30px;}
   .kgrid{grid-template-columns:1fr 1fr;}
@@ -397,8 +434,9 @@ tbody tr:hover td{background:var(--glass);}
         <input type="text" id="g-search" placeholder="بحث سريع... (Ctrl+K)" onkeyup="globalSearch()">
       </div>
     </div>
-    <div class="hdr-r">
+      <div class="hdr-r">
       <span class="hdr-dt" id="date-chip"></span>
+      <span class="hdr-clock"><span class="conn-dot"></span><span id="live-clock">00:00:00</span></span>
       <button class="btn-hth" onclick="toggleTheme()" title="الوضع الليلي"><i class="fas fa-moon" id="theme-icon"></i></button>
       <div class="hdr-u" onclick="toggleSidebar(true)">
         <div class="hdr-av" id="u-av">DV</div>
@@ -825,6 +863,58 @@ document.addEventListener('keydown', e => {
     if(ic) ic.className = 'fas fa-sun';
   }
 })();
+
+// ── TOAST SYSTEM ──
+window.toast = function(msg, type='ok', dur=3000) {
+  const icons = {ok:'fa-check-circle',err:'fa-times-circle',info:'fa-info-circle',warn:'fa-exclamation-triangle'};
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast toast-${type}`;
+  t.innerHTML = `<i class="fas ${icons[type]||(icons.ok)}"></i><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(() => { t.classList.add('out'); setTimeout(()=>t.remove(), 320); }, dur);
+};
+
+// ── REAL-TIME CLOCK ──
+(function() {
+  function tick() {
+    const el = document.getElementById('live-clock');
+    if (el) {
+      const now = new Date();
+      el.innerText = now.toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true});
+    }
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
+// ── LOADING BAR (expose globally) ──
+window.showLoader = () => document.getElementById('load-bar')?.classList.add('on');
+window.hideLoader = () => document.getElementById('load-bar')?.classList.remove('on');
+
+// ── ANIMATED KPI COUNTER ──
+window.animateKPI = function(id, newVal) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const target = parseFloat(newVal) || 0;
+  const current = parseFloat(el.innerText) || 0;
+  if (current === target) return;
+  const steps = 25;
+  const diff = (target - current) / steps;
+  let step = 0;
+  const t = setInterval(() => {
+    step++;
+    const v = step >= steps ? target : current + diff * step;
+    el.innerText = v.toFixed(2);
+    if (step >= steps) clearInterval(t);
+  }, 25);
+};
 </script>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+<!-- Loading Bar -->
+<div class="load-bar" id="load-bar"></div>
+
 </body>
 </html>
