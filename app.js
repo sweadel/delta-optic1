@@ -199,11 +199,21 @@ function applyRoles(role) {
   const isAdmin = ['manager','developer','superadmin'].includes(role);
   const isDev   = ['developer','superadmin'].includes(role);
   
-  document.querySelectorAll('.admin-only').forEach(el    => { el.style.display = isAdmin ? (el.tagName === 'DIV' ? 'block' : 'inline-flex') : 'none'; });
-  document.querySelectorAll('.developer-only').forEach(el => { el.style.display = isDev   ? (el.tagName === 'DIV' ? 'block' : 'inline-flex') : 'none'; });
+  // Smart display: flex for .ni nav items, block for wrapper divs, inline-flex for buttons/spans
+  const getDisplay = (el, visible) => {
+    if (!visible) return 'none';
+    if (el.classList.contains('ni')) return 'flex';
+    const tag = el.tagName;
+    if (tag === 'BUTTON' || tag === 'A' || tag === 'SPAN') return 'inline-flex';
+    return 'block';
+  };
+
+  document.querySelectorAll('.admin-only').forEach(el => { el.style.display = getDisplay(el, isAdmin); });
+  document.querySelectorAll('.developer-only').forEach(el => { el.style.display = getDisplay(el, isDev); });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Auto-login from session
   if (Auth.check()) {
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('shell').classList.add('visible');
@@ -211,6 +221,14 @@ document.addEventListener('DOMContentLoaded', () => {
     startSync();
     goPage('dash');
   }
+
+  // Enter key triggers login from email/password inputs
+  ['auth-u', 'auth-p'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') window.handleLogin(); });
+  });
+  const fe = document.getElementById('forgot-email');
+  if (fe) fe.addEventListener('keydown', e => { if (e.key === 'Enter') window.handleForgotPassword(); });
 });
 
 // ═══════════════════════════════════════════════════════
